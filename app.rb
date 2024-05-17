@@ -8,6 +8,7 @@ gemfile do
   gem 'bullet',       '=7.1.6'
   gem 'sqlite3'
   gem 'minitest'
+  gem 'pry'
 end
 
 require 'active_record'
@@ -72,12 +73,13 @@ class ProblemTest < Minitest::Test
     order = Order.first
     order.order_items.each do |item|
       item.update(name: "item #{('a'..'z').to_a.sample}", quantity: rand(1..10))
-      puts item.name
     end
   end
 
   def teardown
     Bullet.perform_out_of_channel_notifications if Bullet.notification?
     Bullet.end_request
+    Bullet.enable = false
+    puts "Bullet.enable = #{Bullet.enable?}"
   end
 end
